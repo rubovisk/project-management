@@ -4,9 +4,12 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -40,19 +43,23 @@ public class ProjectManagement {
 		@Column(name = "status", length = 200, nullable = true)
 	    private String status;
 		
-		@Column(name = "risk", length = 200, nullable = true)
-	    private String risk;
+		@Column(name = "risco", length = 200, nullable = true)
+	    private String risco;
+		
+		@ManyToOne(fetch = FetchType.LAZY)
+	    @JoinColumn(name = "member_id", nullable = true)
+	    private Members member;
 	    
 	    public Double getOrcamentoTotal() {
 			return orcamentoTotal;
 		}
 
-		public String getRisk() {
-			return risk;
+		public String getRisco() {
+			return risco;
 		}
 
-		public void setRisk(String risk) {
-			this.risk = risk;
+		public void setRisco(String risco) {
+			this.risco = risco;
 		}
 
 		public void setOrcamentoTotal(Double orcamentoTotal) {
@@ -122,6 +129,12 @@ public class ProjectManagement {
 		public void setDtRealTermino(LocalDate dtRealTermino) {
 			this.dtRealTermino = dtRealTermino;
 		}
-	    
-	    
+		
+	    public Members getMember() {
+	        return member;
+	    }
+
+	    public void setMember(Members member) {
+	        this.member = member;
+	    }
 }

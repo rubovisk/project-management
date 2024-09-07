@@ -14,18 +14,21 @@ import org.springframework.web.servlet.ModelAndView;
 import br.com.codegroup.entities.ProjectManagement;
 import br.com.codegroup.enums.ProjectRisk;
 import br.com.codegroup.enums.ProjectStatus;
+import br.com.codegroup.service.MembersService;
 import br.com.codegroup.service.ProjectManagementService;
 
 
 
 @Controller
 public class ProjectManagementController {
-
+	private final MembersService membersService;
     private final ProjectManagementService projectManagementService;
+    private final static String CARGO_PERMITIDO = "funcionario";
 
     @Autowired
-    public ProjectManagementController(ProjectManagementService projectManagementService) {
+    public ProjectManagementController(MembersService memberService,ProjectManagementService projectManagementService) {
         this.projectManagementService = projectManagementService;
+        this.membersService = memberService;
     }
 
     @GetMapping("/")
@@ -35,10 +38,11 @@ public class ProjectManagementController {
     	    modelAndView.addObject("projects", projects);
     	    modelAndView.addObject("projectStatuses", ProjectStatus.values());
     	    modelAndView.addObject("projectRisks", ProjectRisk.values());
+    	    modelAndView.addObject("members", membersService.getMembersByCargo(CARGO_PERMITIDO));
     	    return modelAndView;
     }
     
-    @PostMapping("/api/projects/add")
+    @PostMapping("/projects/add")
     public ModelAndView addProject(
     		 @RequestParam("nome") String nome,
     	        @RequestParam("dtInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dtInicio,
@@ -48,7 +52,8 @@ public class ProjectManagementController {
     	        @RequestParam("orcamentoTotal") Double orcamentoTotal,
     	        @RequestParam("descricao") String descricao,
     	        @RequestParam("status") Integer status,
-    	        @RequestParam("risk") int risk) {
+    	        @RequestParam("risco") int risco,
+    	        @RequestParam(value = "member", required = false) Long memberId) {
         
         ProjectManagement project = new ProjectManagement();
         project.setNome(nome);
@@ -59,14 +64,17 @@ public class ProjectManagementController {
         project.setOrcamentoTotal(orcamentoTotal);
         project.setDescricao(descricao);
         project.setStatus(ProjectStatus.fromCode(status).getDescription());
-        project.setRisk(ProjectRisk.fromCode(risk).getDescription());
+        project.setRisco(ProjectRisk.fromCode(risco).getDescription());
+        if (memberId != null) {
+            project.setMember(membersService.getMembersById(memberId));
+        }
         
         projectManagementService.saveProject(project);
         
         return new ModelAndView("redirect:/"); 
     }
     
-    @PostMapping("/api/projects/update")
+    @PostMapping("/projects/update")
     public ModelAndView updateProject(
             @RequestParam("id") Long id,
             @RequestParam("nome") String nome,
@@ -76,7 +84,9 @@ public class ProjectManagementController {
             @RequestParam(value = "dtRealTermino", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dtRealTermino,
             @RequestParam("orcamentoTotal") Double orcamentoTotal,
 	        @RequestParam("descricao") String descricao,
-	        @RequestParam("status") Integer status) {
+	        @RequestParam("status") Integer status,
+	        @RequestParam("risco") int risco,
+	        @RequestParam(value = "member", required = false) Long memberId) {
         
         ProjectManagement project = projectManagementService.getProjectById(id);
         project.setNome(nome);
@@ -87,16 +97,22 @@ public class ProjectManagementController {
         project.setOrcamentoTotal(orcamentoTotal);
         project.setDescricao(descricao);
         project.setStatus(ProjectStatus.fromCode(status).getDescription());
+        project.setRisco(ProjectRisk.fromCode(risco).getDescription());
+        
+        if (memberId != null) {
+            project.setMember(membersService.getMembersById(memberId));
+        }
+        
 
         projectManagementService.saveProject(project);
         
         return new ModelAndView("redirect:/");
     }
     
-    @PostMapping("/api/projects/delete")
+    @PostMapping("/projects/delete")
     public ModelAndView deleteProject(@RequestParam("id") Long id) {
         projectManagementService.deleteProject(id);
-        return new ModelAndView("redirect:/");  // Redirect to the main page after deletion
+        return new ModelAndView("redirect:/");
     }
 
 }

@@ -27,7 +27,7 @@ body {
 <body>
 	<div class="container">
 		<h1 class="mb-4">Novo projeto</h1>
-		<form action="<c:url value='/api/projects/add' />" method="post">
+		<form action="<c:url value='/projects/add' />" method="post">
 			<div class="mb-3">
 				<label for="nome" class="form-label">Nome projeto:</label> <input
 					type="text" id="nome" name="nome" class="form-control" required />
@@ -72,9 +72,20 @@ body {
 			</div>
 			<div class="mb-3">
 				<label for="risk" class="form-label">Risco:</label> <select
-					id="risk" name="risk" class="form-select">
+					id="risk" name="risco" class="form-select">
 					<c:forEach var="risk" items="${projectRisks}">
 						<option value="${risk.code}">${risk.description}</option>
+					</c:forEach>
+				</select>
+			</div>
+
+			<div class="mb-3">
+				<label for="member-${project.id}" class="form-label">Membro
+					responsável:</label> <select id="member-${project.id}" name="member"
+					class="form-select">
+					<option value="">Selecione um membro</option>
+					<c:forEach var="member" items="${members}">
+						<option value="${member.id}">${member.nome}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -109,7 +120,7 @@ body {
 						<td>${project.orcamentoTotal}</td>
 						<td>${project.descricao}</td>
 						<td>${project.status}</td>
-						<td>${project.risk}</td>
+						<td>${project.risco}</td>
 						<td>
 							<button type="button" class="btn btn-warning btn-sm"
 								data-bs-toggle="modal" data-bs-target="#editModal-${project.id}"
@@ -118,21 +129,21 @@ body {
 								data-gerenteResponsavel="${project.gerenteResponsavel}"
 								data-dtPrvTermino="${project.dtPrvTermino}"
 								data-dtRealTermino="${project.dtRealTermino}"
-								data-status="${project.status}"
-								data-risk="${project.risk}">
+								data-status="${project.status}" data-risco="${project.risco}">
 								<i class="bi bi-pencil"></i>
 							</button>
 						</td>
-						<td>
-							<form action="<c:url value='/api/projects/delete' />"
-								method="post" style="display: inline;">
-								<input type="hidden" name="id" value="${project.id}" />
-								<button type="submit" class="btn btn-danger btn-sm"
-									onclick="return confirm('Are you sure you want to delete this project?');">
-									<i class="bi bi-trash"></i>
-								</button>
-							</form>
-						</td>
+						<td><c:if
+								test="${project.status != 'Iniciado' && project.status != 'Em Andamento' && project.status != 'Encerrado'}">
+								<form action="<c:url value='/projects/delete' />" method="post"
+									style="display: inline;">
+									<input type="hidden" name="id" value="${project.id}" />
+									<button type="submit" class="btn btn-danger btn-sm"
+										onclick="return confirm('Are you sure you want to delete this project?');">
+										<i class="bi bi-trash"></i>
+									</button>
+								</form>
+							</c:if></td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -150,7 +161,7 @@ body {
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 							aria-label="Close"></button>
 					</div>
-					<form action="<c:url value='/api/projects/update' />" method="post">
+					<form action="<c:url value='/projects/update' />" method="post">
 						<div class="modal-body">
 							<input type="hidden" name="id" value="${project.id}" />
 							<div class="mb-3">
@@ -194,29 +205,41 @@ body {
 									id="descricao-${project.id}" name="descricao"
 									value="${project.descricao}" required />
 							</div>
-							
+
 							<div class="mb-3">
-    							<label for="status-${project.id}" class="form-label">Status:</label>
-    							<select id="status-${project.id}" name="status" class="form-select">
-        						<c:forEach var="status" items="${projectStatuses}">
-            						<option value="${status.code}" ${status.description == project.status ? 'selected' : ''}>
-                						${status.description}
-            						</option>
-        						</c:forEach>
-    							</select>
+								<label for="status-${project.id}" class="form-label">Status:</label>
+								<select id="status-${project.id}" name="status"
+									class="form-select">
+									<c:forEach var="status" items="${projectStatuses}">
+										<option value="${status.code}"
+											${status.description == project.status ? 'selected' : ''}>
+											${status.description}</option>
+									</c:forEach>
+								</select>
 							</div>
-							
+
 							<div class="mb-3">
-    							<label for="risk-${project.id}" class="form-label">Risco:</label>
-    							<select id="risk-${project.id}" name="risk" class="form-select">
-        						<c:forEach var="risk" items="${projectRisks}">
-            						<option value="${risk.code}" ${risk.description == project.status ? 'selected' : ''}>
-                						${risk.description}
-            						</option>
-        						</c:forEach>
-    							</select>
+								<label for="risk-${project.id}" class="form-label">Risco:</label>
+								<select id="risk-${project.id}" name="risco" class="form-select">
+									<c:forEach var="risk" items="${projectRisks}">
+										<option value="${risk.code}"
+											${risk.description == project.status ? 'selected' : ''}>
+											${risk.description}</option>
+									</c:forEach>
+								</select>
 							</div>
-							
+
+							<div class="mb-3">
+								<label for="member-${project.id}" class="form-label">Membro
+									responsável:</label> <select id="member-${project.id}" name="member"
+									class="form-select">
+									<option value="">Selecione um membro</option>
+									<c:forEach var="member" items="${members}">
+										<option value="${member.id}">${member.nome}</option>
+									</c:forEach>
+								</select>
+							</div>
+
 
 						</div>
 						<div class="modal-footer">
