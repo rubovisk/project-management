@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  servlet: 
+    context-path: /project-management	
+
+spring:
+  application:
+    name: project-management
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  datasource:
+    url: jdbc:postgresql://localhost:5432/prjmngmtdb
+    username: codegroup
+    password: codegroup123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
