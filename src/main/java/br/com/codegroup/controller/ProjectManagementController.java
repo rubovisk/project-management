@@ -16,6 +16,7 @@ import br.com.codegroup.enums.ProjectRisk;
 import br.com.codegroup.enums.ProjectStatus;
 import br.com.codegroup.service.MembersService;
 import br.com.codegroup.service.ProjectManagementService;
+import br.com.codegroup.utils.CurrencyUtils;
 
 
 
@@ -49,7 +50,7 @@ public class ProjectManagementController {
     	        @RequestParam("gerenteResponsavel") String gerenteResponsavel,
     	        @RequestParam(value = "dtPrvTermino", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dtPrvTermino,
     	        @RequestParam(value = "dtRealTermino", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dtRealTermino,
-    	        @RequestParam("orcamentoTotal") Double orcamentoTotal,
+    	        @RequestParam("orcamentoTotal") String orcamentoTotal,
     	        @RequestParam("descricao") String descricao,
     	        @RequestParam("status") Integer status,
     	        @RequestParam("risco") int risco,
@@ -61,7 +62,7 @@ public class ProjectManagementController {
         project.setGerenteResponsavel(gerenteResponsavel);
         project.setDtPrvTermino(dtPrvTermino);
         project.setDtRealTermino(dtRealTermino);
-        project.setOrcamentoTotal(orcamentoTotal);
+        project.setOrcamentoTotal(CurrencyUtils.getDoubleValue(orcamentoTotal));
         project.setDescricao(descricao);
         project.setStatus(ProjectStatus.fromCode(status).getDescription());
         project.setRisco(ProjectRisk.fromCode(risco).getDescription());
@@ -82,11 +83,13 @@ public class ProjectManagementController {
             @RequestParam("gerenteResponsavel") String gerenteResponsavel,
             @RequestParam(value = "dtPrvTermino", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dtPrvTermino,
             @RequestParam(value = "dtRealTermino", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dtRealTermino,
-            @RequestParam("orcamentoTotal") Double orcamentoTotal,
+            @RequestParam("orcamentoTotal") String orcamentoTotal,
 	        @RequestParam("descricao") String descricao,
 	        @RequestParam("status") Integer status,
 	        @RequestParam("risco") int risco,
 	        @RequestParam(value = "member", required = false) Long memberId) {
+    	
+    	Double orcamentoTotalB = Double.parseDouble(orcamentoTotal.trim().replace(".", "").replace(",", ".").replace("R$", ""));
         
         ProjectManagement project = projectManagementService.getProjectById(id);
         project.setNome(nome);
@@ -94,7 +97,7 @@ public class ProjectManagementController {
         project.setGerenteResponsavel(gerenteResponsavel);
         project.setDtPrvTermino(dtPrvTermino);
         project.setDtRealTermino(dtRealTermino);
-        project.setOrcamentoTotal(orcamentoTotal);
+        project.setOrcamentoTotal(orcamentoTotalB);
         project.setDescricao(descricao);
         project.setStatus(ProjectStatus.fromCode(status).getDescription());
         project.setRisco(ProjectRisk.fromCode(risco).getDescription());

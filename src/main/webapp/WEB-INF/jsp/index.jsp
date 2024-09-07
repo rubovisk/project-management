@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="br.com.codegroup.utils.DateUtils"%>
+<%@ page import="br.com.codegroup.utils.CurrencyUtils"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -95,18 +96,18 @@ body {
 		</form>
 
 		<h2 class="my-4">Projetos</h2>
-		<table class="table table-striped table-bordered table-hover">
+		<table class="table table-striped table-hover">
 			<thead class="text-start">
 				<tr>
-					<th class="align-top">Nome</th>
-					<th class="align-top">Data Inicio</th>
-					<th class="align-top">Gerente</th>
-					<th class="align-top">Data Fim Estimada</th>
-					<th class="align-top">Data Fim Real</th>
-					<th class="align-top">Orçamento total</th>
-					<th class="align-top">Descricao</th>
-					<th class="align-top">Status</th>
-					<th class="align-top">Risco</th>
+					<th class="align-top column-large">Nome</th>
+					<th class="align-top column-small">Data Inicio</th>
+					<th class="align-top column-medium">Gerente</th>
+					<th class="align-top column-medium">Data Fim Estimada</th>
+					<th class="align-top column-medium">Data Fim Real</th>
+					<th class="align-top column-medium">Orçamento Total</th>
+					<th class="align-top column-large">Descricao</th>
+					<th class="align-top column-small">Status</th>
+					<th class="align-top column-small">Risco</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -117,19 +118,13 @@ body {
 						<td>${project.gerenteResponsavel}</td>
 						<td>${DateUtils.formatDate(project.dtPrvTermino)}</td>
 						<td>${DateUtils.formatDate(project.dtRealTermino)}</td>
-						<td>${project.orcamentoTotal}</td>
+						<td>${CurrencyUtils.formatCurrency(project.orcamentoTotal)}</td>
 						<td>${project.descricao}</td>
 						<td>${project.status}</td>
 						<td>${project.risco}</td>
 						<td>
 							<button type="button" class="btn btn-warning btn-sm"
-								data-bs-toggle="modal" data-bs-target="#editModal-${project.id}"
-								data-id="${project.id}" data-nome="${project.nome}"
-								data-dtInicio="${project.dtInicio}"
-								data-gerenteResponsavel="${project.gerenteResponsavel}"
-								data-dtPrvTermino="${project.dtPrvTermino}"
-								data-dtRealTermino="${project.dtRealTermino}"
-								data-status="${project.status}" data-risco="${project.risco}">
+								data-bs-toggle="modal" data-bs-target="#editModal-${project.id}">
 								<i class="bi bi-pencil"></i>
 							</button>
 						</td>
@@ -197,7 +192,8 @@ body {
 								<label for="orcamentoTotal-${project.id}" class="form-label">Orçamento
 									Total:</label> <input type="text" class="form-control"
 									id="orcamentoTotal-${project.id}" name="orcamentoTotal"
-									value="${project.orcamentoTotal}" required />
+									value="${CurrencyUtils.formatCurrency(project.orcamentoTotal)}"
+									required />
 							</div>
 							<div class="mb-3">
 								<label for="descricao-${project.id}" class="form-label">Descricao:</label>
@@ -235,7 +231,8 @@ body {
 									class="form-select">
 									<option value="">Selecione um membro</option>
 									<c:forEach var="member" items="${members}">
-										<option value="${member.id}">${member.nome}</option>
+										<option value="${member.id}"
+											${member.nome == project.member.nome ? 'selected' : ''}>${member.nome}</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -258,5 +255,15 @@ body {
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#orcamentoTotal').mask('R$ 000.000.000.000,00', {
+				reverse : true
+			});
+		});
+	</script>
 </body>
 </html>
