@@ -12,8 +12,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 @Entity
 @Table(name="project_management")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class ProjectManagement {
 	 	@Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,92 +62,4 @@ public class ProjectManagement {
 		@ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "member_id", nullable = true)
 	    private Members member;
-	    
-	    public Double getOrcamentoTotal() {
-			return orcamentoTotal;
-		}
-
-		public String getRisco() {
-			return risco;
-		}
-
-		public void setRisco(String risco) {
-			this.risco = risco;
-		}
-
-		public void setOrcamentoTotal(Double orcamentoTotal) {
-			this.orcamentoTotal = orcamentoTotal;
-		}
-
-		public String getDescricao() {
-			return descricao;
-		}
-
-		public void setDescricao(String descricao) {
-			this.descricao = descricao;
-		}
-
-		public String getStatus() {
-			return status;
-		}
-
-		public void setStatus(String status) {
-			this.status = status;
-		}
-
-		public Long getId() {
-			return id;
-		}
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-		public String getNome() {
-			return nome;
-		}
-
-		public void setNome(String nome) {
-			this.nome = nome;
-		}
-
-		public LocalDate getDtInicio() {
-			return dtInicio;
-		}
-
-		public void setDtInicio(LocalDate dtInicio) {
-			this.dtInicio = dtInicio;
-		}
-
-		public String getGerenteResponsavel() {
-			return gerenteResponsavel;
-		}
-
-		public void setGerenteResponsavel(String gerenteResponsavel) {
-			this.gerenteResponsavel = gerenteResponsavel;
-		}
-
-		public LocalDate getDtPrvTermino() {
-			return dtPrvTermino;
-		}
-
-		public void setDtPrvTermino(LocalDate dtPrvTermino) {
-			this.dtPrvTermino = dtPrvTermino;
-		}
-
-		public LocalDate getDtRealTermino() {
-			return dtRealTermino;
-		}
-
-		public void setDtRealTermino(LocalDate dtRealTermino) {
-			this.dtRealTermino = dtRealTermino;
-		}
-		
-	    public Members getMember() {
-	        return member;
-	    }
-
-	    public void setMember(Members member) {
-	        this.member = member;
-	    }
 }

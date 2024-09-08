@@ -11,8 +11,21 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 @Entity
 @Table(name="members")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class Members {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,34 +34,6 @@ public class Members {
 	private String nome;
 	@Column(name = "cargo", length = 500, nullable = false)
 	private String cargo;
-	
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private Set<ProjectManagement> projects;
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	public String getCargo() {
-		return cargo;
-	}
-	public void setCargo(String cargo) {
-		this.cargo = cargo;
-	}
-	
-	public Set<ProjectManagement> getProjects() {
-	    return projects;
-	}
-
-	public void setProjects(Set<ProjectManagement> projects) {
-	    this.projects = projects;
-	}
 }

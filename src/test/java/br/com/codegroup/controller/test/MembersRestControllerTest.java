@@ -59,14 +59,17 @@ class MembersRestControllerTest {
 
     @Test
     void testGetAllMembers() throws Exception {
-        Members member1 = new Members();
-        Members member2 = new Members();
-        member1.setId(1L);
-        member1.setNome("Rubens Daniel");
-        member1.setCargo("Desenvolvedor");
-        member2.setId(2L);
-        member2.setNome("Fernanda Messias");
-        member2.setCargo("Gerente");
+        Members member1 = Members.builder()
+        		.id(1L)
+        		.nome("Rubens Daniel")
+        		.cargo("Desenvolvedor")
+        		.build();
+        Members member2 = Members.builder()
+        		.id(2L)
+        		.nome("Fernanda Messias")
+        		.cargo("Gerente")
+        		.build();
+        
         List<Members> members = List.of(member1, member2);
 
         when(membersService.getAllMembers()).thenReturn(members);

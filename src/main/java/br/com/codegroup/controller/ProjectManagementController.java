@@ -3,7 +3,8 @@ package br.com.codegroup.controller;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,24 +18,18 @@ import br.com.codegroup.enums.ProjectStatus;
 import br.com.codegroup.service.MembersService;
 import br.com.codegroup.service.ProjectManagementService;
 import br.com.codegroup.utils.CurrencyUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.RequiredArgsConstructor;
 
 
 
 @Controller
+@RequiredArgsConstructor
 public class ProjectManagementController {
 	private static final Logger logger = LogManager.getLogger(ProjectManagementController.class);
 	private final MembersService membersService;
     private final ProjectManagementService projectManagementService;
     private static final String CARGO_PERMITIDO = "funcionario";
     private static final String REDIRECT = "redirect:/";
-
-    @Autowired
-    public ProjectManagementController(MembersService memberService,ProjectManagementService projectManagementService) {
-        this.projectManagementService = projectManagementService;
-        this.membersService = memberService;
-    }
 
     @GetMapping("/")
     public ModelAndView index() {
