@@ -15,17 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.codegroup.dto.MemberDTO;
 import br.com.codegroup.entities.Members;
 import br.com.codegroup.service.MembersService;
+import br.com.codegroup.service.ProjectManagementService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/members")
+@RequiredArgsConstructor
 public class MembersRestController {
 		private static final Logger logger = LogManager.getLogger(MembersRestController.class);
 		
 	    private final MembersService membersService;
-	    @Autowired
-	    public MembersRestController(MembersService membersService) {
-	        this.membersService = membersService;
-	    }
 	    
 	    @PostMapping("/create")
 	    public ResponseEntity<MemberDTO> createMember(@RequestBody MemberDTO memberDTO) {
