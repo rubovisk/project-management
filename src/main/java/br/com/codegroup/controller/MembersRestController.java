@@ -2,6 +2,8 @@ package br.com.codegroup.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +19,8 @@ import br.com.codegroup.service.MembersService;
 @RestController
 @RequestMapping("/api/members")
 public class MembersRestController {
-	
+		private static final Logger logger = LogManager.getLogger(MembersRestController.class);
+		
 	    private final MembersService membersService;
 	    @Autowired
 	    public MembersRestController(MembersService membersService) {
@@ -32,7 +35,7 @@ public class MembersRestController {
 	        
 	        Members savedMember = membersService.saveMember(member);
 	        MemberDTO savedMemberDTO = new MemberDTO(savedMember.getId(), savedMember.getNome(), savedMember.getCargo());
-	        
+	        logger.info("Membro {} adicionado com sucesso", savedMember.getNome());
 	        return ResponseEntity.ok(savedMemberDTO);
 	    }
 

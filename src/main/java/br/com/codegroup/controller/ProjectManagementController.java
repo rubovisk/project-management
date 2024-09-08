@@ -17,11 +17,14 @@ import br.com.codegroup.enums.ProjectStatus;
 import br.com.codegroup.service.MembersService;
 import br.com.codegroup.service.ProjectManagementService;
 import br.com.codegroup.utils.CurrencyUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 
 @Controller
 public class ProjectManagementController {
+	private static final Logger logger = LogManager.getLogger(ProjectManagementController.class);
 	private final MembersService membersService;
     private final ProjectManagementService projectManagementService;
     private static final String CARGO_PERMITIDO = "funcionario";
@@ -72,7 +75,7 @@ public class ProjectManagementController {
         }
         
         projectManagementService.saveProject(project);
-        
+        logger.info("Projeto {} adicionado com sucesso", project.getNome());
         return new ModelAndView(REDIRECT); 
     }
     
@@ -109,13 +112,14 @@ public class ProjectManagementController {
         
 
         projectManagementService.saveProject(project);
-        
+        logger.info("Projeto {} atualizado com sucesso", project.getNome());
         return new ModelAndView(REDIRECT);
     }
     
     @PostMapping("/projects/delete")
     public ModelAndView deleteProject(@RequestParam("id") Long id) {
         projectManagementService.deleteProject(id);
+        logger.info("Projeto id: {} excluído com sucesso", id);
         return new ModelAndView(REDIRECT);
     }
 
