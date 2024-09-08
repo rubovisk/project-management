@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.codegroup.dto.MemberDTO;
 import br.com.codegroup.entities.Members;
 import br.com.codegroup.service.MembersService;
 
@@ -24,14 +25,24 @@ public class MembersRestController {
 	    }
 	    
 	    @PostMapping("/create")
-	    public ResponseEntity<Members> createMember(@RequestBody Members member) {
+	    public ResponseEntity<MemberDTO> createMember(@RequestBody MemberDTO memberDTO) {
+	        Members member = new Members();
+	        member.setNome(memberDTO.getNome());
+	        member.setCargo(memberDTO.getCargo());
+	        
 	        Members savedMember = membersService.saveMember(member);
-	        return ResponseEntity.ok(savedMember);
+	        MemberDTO savedMemberDTO = new MemberDTO(savedMember.getId(), savedMember.getNome(), savedMember.getCargo());
+	        
+	        return ResponseEntity.ok(savedMemberDTO);
 	    }
 
 	    @GetMapping("/all")
-	    public ResponseEntity<List<Members>> getAllMembers() {
+	    public ResponseEntity<List<MemberDTO>> getAllMembers() {
 	        List<Members> members = membersService.getAllMembers();
-	        return ResponseEntity.ok(members);
+	        List<MemberDTO> memberDTOs = members.stream()
+	            .map(m -> new MemberDTO(m.getId(), m.getNome(), m.getCargo()))
+	            .toList();
+	        
+	        return ResponseEntity.ok(memberDTOs);
 	    }
 }

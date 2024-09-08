@@ -24,7 +24,8 @@ import br.com.codegroup.utils.CurrencyUtils;
 public class ProjectManagementController {
 	private final MembersService membersService;
     private final ProjectManagementService projectManagementService;
-    private final static String CARGO_PERMITIDO = "funcionario";
+    private static final String CARGO_PERMITIDO = "funcionario";
+    private static final String REDIRECT = "redirect:/";
 
     @Autowired
     public ProjectManagementController(MembersService memberService,ProjectManagementService projectManagementService) {
@@ -72,7 +73,7 @@ public class ProjectManagementController {
         
         projectManagementService.saveProject(project);
         
-        return new ModelAndView("redirect:/"); 
+        return new ModelAndView(REDIRECT); 
     }
     
     @PostMapping("/projects/update")
@@ -89,7 +90,7 @@ public class ProjectManagementController {
 	        @RequestParam("risco") int risco,
 	        @RequestParam(value = "member", required = false) Long memberId) {
     	
-    	Double orcamentoTotalB = Double.parseDouble(orcamentoTotal.trim().replace(".", "").replace(",", ".").replace("R$", ""));
+    	Double valorOrcamentoTotal = Double.parseDouble(orcamentoTotal.trim().replace(".", "").replace(",", ".").replace("R$", ""));
         
         ProjectManagement project = projectManagementService.getProjectById(id);
         project.setNome(nome);
@@ -97,7 +98,7 @@ public class ProjectManagementController {
         project.setGerenteResponsavel(gerenteResponsavel);
         project.setDtPrvTermino(dtPrvTermino);
         project.setDtRealTermino(dtRealTermino);
-        project.setOrcamentoTotal(orcamentoTotalB);
+        project.setOrcamentoTotal(valorOrcamentoTotal);
         project.setDescricao(descricao);
         project.setStatus(ProjectStatus.fromCode(status).getDescription());
         project.setRisco(ProjectRisk.fromCode(risco).getDescription());
@@ -109,13 +110,13 @@ public class ProjectManagementController {
 
         projectManagementService.saveProject(project);
         
-        return new ModelAndView("redirect:/");
+        return new ModelAndView(REDIRECT);
     }
     
     @PostMapping("/projects/delete")
     public ModelAndView deleteProject(@RequestParam("id") Long id) {
         projectManagementService.deleteProject(id);
-        return new ModelAndView("redirect:/");
+        return new ModelAndView(REDIRECT);
     }
 
 }
