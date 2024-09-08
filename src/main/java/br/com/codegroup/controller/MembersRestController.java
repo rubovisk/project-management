@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,17 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.codegroup.dto.MemberDTO;
 import br.com.codegroup.entities.Members;
 import br.com.codegroup.service.MembersService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/members")
+@RequiredArgsConstructor
 public class MembersRestController {
 		private static final Logger logger = LogManager.getLogger(MembersRestController.class);
 		
 	    private final MembersService membersService;
-	    @Autowired
-	    public MembersRestController(MembersService membersService) {
-	        this.membersService = membersService;
-	    }
 	    
 	    @PostMapping("/create")
 	    public ResponseEntity<MemberDTO> createMember(@RequestBody MemberDTO memberDTO) {
